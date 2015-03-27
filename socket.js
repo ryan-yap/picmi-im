@@ -5,7 +5,7 @@ var proximity = require('geo-proximity').initialize(client)
 
 var app = require('http').createServer()
 var io = require('socket.io')(app);
-
+var count = 0
 app.listen(8080);
 
 io.on("connection", function(socket){
@@ -20,8 +20,10 @@ io.on("connection", function(socket){
     });
 
     socket.on("test", function(data) {
-      var clients = io.sockets.clients();
-      console.log(clients.length)
+      if (data == "test"){
+        count++;
+        console.log(count)
+      }
     })
 
     socket.on("disconnect", function() {
