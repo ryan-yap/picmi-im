@@ -20,7 +20,8 @@ io.on("connection", function(socket){
     });
 
     socket.on("test", function(data) {
-      console.log(data)
+      var clients = io.sockets.clients();
+      console.log(clients.length)
     })
 
     socket.on("disconnect", function() {
