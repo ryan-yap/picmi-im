@@ -10,7 +10,6 @@ var connection_made = 0
 app.listen(8080);
 
 io.on("connection", function(socket){
-    console.log("new connection")
     connection_made++;
     socket.on("ping", function(data) {
       info = data.split(":")
