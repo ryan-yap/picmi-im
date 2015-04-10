@@ -1,10 +1,9 @@
 var dispatch_db = require('mongoskin').db('mongodb://54.153.62.38:27017/Dispatch');
 var ObjectID = require('mongoskin').ObjectID
-var proximity = require('geo-proximity').initialize(client)
 
 var redis = require('redis'),
     client = redis.createClient(6379, '54.67.18.228', {})
-
+var proximity = require('geo-proximity').initialize(client)
 var app = require('http').createServer()
 var io = require('socket.io')(app);
 app.listen(8080);
@@ -20,8 +19,7 @@ io.on("connection", function(socket){
       var socket_id = socket.id;
       var uid = data
       new_connection = new connection(uid, socket_id)
-	console.log(new_connection)
-      dispatch_db.collection('connection').insert(new_connection, function(err, result) {
+      dispatch_db.collection('connection').save(new_connection, function(err, result) {
         if (err){ 
           throw err; 
         }
@@ -31,7 +29,7 @@ io.on("connection", function(socket){
 
     socket.on("send", function(data){
       info = data.split(":");
-      dispatch_db.collection('connection').find({_id:ObjectID(info[0])}).toArray(
+      dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
           console.log(result[0])
           io.sockets.connected[result[0].socket_id].emit("receive", info[1]);
@@ -48,8 +46,10 @@ io.on("connection", function(socket){
       var longitude = info[3]
       var latitude = info[4]
       var image_url = info[5]
-      dispatch_db.collection('connection').find({_id:ObjectID(info[0])}).toArray(
+      console.log(info[0])
+      dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
+	  console.log(result)
           io.sockets.connected[result[0].socket_id].emit("photorequest", data);
         }
       );
@@ -61,7 +61,7 @@ io.on("connection", function(socket){
       var message = info[1]
       var image_url = info[2]
 
-      dispatch_db.collection('connection').find({_id:ObjectID(info[0])}).toArray(
+      dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
           io.sockets.connected[result[0].socket_id].emit("photoready", data);
         }
@@ -77,6 +77,7 @@ io.on("connection", function(socket){
     socket.on("disconnect", function() {
       dispatch_db.collection('connection').find({socket_id:socket.id}).toArray(
         function(err, result) {
+		console.log(typeof result[0]._id)
           proximity.removeLocation(result[0]._id, function(err, reply){
             if(err) console.error(err)
             else console.log('removed location:', reply)
@@ -88,4 +89,4 @@ io.on("connection", function(socket){
       });
       return
     });
-  });
+  });`
