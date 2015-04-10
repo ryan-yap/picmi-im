@@ -74,7 +74,7 @@ io.on("connection", function(socket){
     })
 
     socket.on("disconnect", function() {
-      dispatch_db.collection('connection').remove({socket_id:socket.id}}, function(err, result) {
+      dispatch_db.collection('connection').remove({socket_id:socket.id}, function(err, result) {
         if (!err) console.log('Deleted', result);
       });
       return
