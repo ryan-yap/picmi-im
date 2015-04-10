@@ -11,7 +11,6 @@ function connection(uid, socket_id) {
 }
 
 io.on("connection", function(socket){
-    connection_made++;
     console.log("New connection")
     socket.on("setID", function(data) {
       var socket_id = socket.id;
@@ -23,7 +22,6 @@ io.on("connection", function(socket){
         }
         console.log(result[0])
       });
-      console.log(data)
     });
 
     socket.on("send", function(data){
@@ -67,9 +65,7 @@ io.on("connection", function(socket){
 
     socket.on("test", function(data) {
       if (data == "test"){
-        count++;
         console.log("received messaged", count)
-        console.log("connection_made", connection_made)
       }
     })
 
