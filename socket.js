@@ -15,7 +15,8 @@ io.on("connection", function(socket){
     socket.on("setID", function(data) {
       var socket_id = socket.id;
       var uid = data
-      new_connection = connection(uid, socket_id)
+      new_connection = new connection(uid, socket_id)
+	console.log(new_connection)
       dispatch_db.collection('connection').insert(new_connection, function(err, result) {
         if (err){ 
           throw err; 
