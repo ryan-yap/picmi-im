@@ -69,9 +69,7 @@ io.on("connection", function(socket){
     })
 
     socket.on("test", function(data) {
-      if (data == "test"){
-        console.log("received messaged", count)
-      }
+        console.log("received messaged")
     })
 
     socket.on("disconnect", function() {
