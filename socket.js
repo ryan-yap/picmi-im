@@ -39,13 +39,8 @@ io.on("connection", function(socket){
     })
 
     socket.on("driverrequest", function(data){
-      info = data.split(":");
+      info = data.split(":!$)$@)!$:");
       var driver_id = info[0]
-      var message = info[1]
-      var distance = info[2]
-      var longitude = info[3]
-      var latitude = info[4]
-      var image_url = info[5]
       console.log(info[0])
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
