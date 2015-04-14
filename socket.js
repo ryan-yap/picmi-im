@@ -44,8 +44,19 @@ io.on("connection", function(socket){
       console.log(info[0])
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
-	  console.log(result)
+	        console.log(result)
           io.sockets.connected[result[0].socket_id].emit("photorequest", data);
+        }
+      );
+    })
+
+
+    socket.on("acceptrequest", function(data){
+      var requester_id = data
+      dispatch_db.collection('connection').find({_id:requester_id}).toArray(
+        function(err, result) {
+          console.log(result)
+          io.sockets.connected[result[0].socket_id].emit("requestconfirmation", data);
         }
       );
     })
