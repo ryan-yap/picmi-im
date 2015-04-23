@@ -43,6 +43,7 @@ io.on("connection", function(socket){
       console.log(data)
       var driver_id = info[0]
       console.log(info[0])
+      //Need Error Handling
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
 	        console.log(result)
@@ -51,6 +52,19 @@ io.on("connection", function(socket){
       );
     })
 
+    socket.on("driverresponse", function(data){
+      info = data.split(":!$)$@)!$:");
+      console.log(data)
+      var driver_id = info[0]
+      console.log(info[0])
+      //Need Error Handling
+      dispatch_db.collection('connection').find({_id:info[0]}).toArray(
+        function(err, result) {
+          console.log(result)
+          io.sockets.connected[result[0].socket_id].emit("photoready", data);
+        }
+      );
+    })
 
     socket.on("acceptrequest", function(data){
       var requester_id = data
