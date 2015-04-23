@@ -40,6 +40,7 @@ io.on("connection", function(socket){
 
     socket.on("driverrequest", function(data){
       info = data.split(":!$)$@)!$:");
+      console.log(data)
       var driver_id = info[0]
       console.log(info[0])
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
@@ -81,11 +82,14 @@ io.on("connection", function(socket){
     socket.on("disconnect", function() {
       dispatch_db.collection('connection').find({socket_id:socket.id}).toArray(
         function(err, result) {
-		console.log(typeof result[0]._id)
-          proximity.removeLocation(result[0]._id, function(err, reply){
-            if(err) console.error(err)
-            else console.log('removed location:', reply)
-          })
+		if(result[0]){
+        		proximity.removeLocation(result[0]._id, function(err, reply){
+            			if(err) console.error(err)
+            			else console.log('removed location:', reply)
+          		})
+		}else{
+			console.log("No disconnecting socket id found!")
+		}
         }
       );
       dispatch_db.collection('connection').remove({socket_id:socket.id}, function(err, result) {
