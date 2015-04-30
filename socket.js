@@ -105,6 +105,26 @@ io.on("connection", function(socket){
       );
   })
 
+  socket.on("declinerequest", function(data){
+    var requester_id = data
+    dispatch_db.collection('connection').find({_id:requester_id}).toArray(
+      function(err, result) {
+        console.log(result)
+        if(result[0]){
+          io.sockets.connected[result[0].socket_id].emit("requestdeclined", data);
+        }else{
+          proximity.removeLocation(requester_id, function(err, reply){
+            if(err) console.error(err)
+              else console.log('removed location:', reply)
+            })
+          dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
+            if (!err) console.log('Deleted', result);
+          });
+        }
+      }
+      );
+  })
+
   socket.on("submitphoto", function(data){
     info = data.split(":");
     var user_id = info[0]
