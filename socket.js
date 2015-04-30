@@ -28,11 +28,11 @@ io.on("connection", function(socket){
   });
 
   socket.on("send", function(data){
-    info = data.split(":");
+	console.log(data)
     dispatch_db.collection('connection').find({_id:info[0]}).toArray(
       function(err, result) {
         console.log(result[0])
-        io.sockets.connected[result[0].socket_id].emit("receive", info[1]);
+        io.sockets.connected[result[0].socket_id].emit("receive", data);
         console.log(data)
       }
       );
