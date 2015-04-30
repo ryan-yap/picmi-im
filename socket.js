@@ -28,6 +28,7 @@ io.on("connection", function(socket){
   });
 
   socket.on("send", function(data){
+  info = data.split(":!$)$@)!$:");
 	console.log(data)
     dispatch_db.collection('connection').find({_id:info[0]}).toArray(
       function(err, result) {
