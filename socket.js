@@ -87,7 +87,8 @@ io.on("connection", function(socket){
     })
 
   socket.on("acceptrequest", function(data){
-    var requester_id = data
+    info = data.split(":!$)$@)!$:");
+    var requester_id = info[0]
     dispatch_db.collection('connection').find({_id:requester_id}).toArray(
       function(err, result) {
         console.log(result)
@@ -107,7 +108,8 @@ io.on("connection", function(socket){
   })
 
   socket.on("declinerequest", function(data){
-    var requester_id = data
+    info = data.split(":!$)$@)!$:");
+    var requester_id = info[0]
     dispatch_db.collection('connection').find({_id:requester_id}).toArray(
       function(err, result) {
         console.log(result)
