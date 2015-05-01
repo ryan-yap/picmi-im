@@ -62,6 +62,29 @@ io.on("connection", function(socket){
       );
     })
 
+  socket.on("cancelrequest", function(data){
+    info = data.split(":!$)$@)!$:");
+    console.log(data)
+    var driver_id = info[0]
+    console.log(info[0])
+      //Need Error Handling
+      dispatch_db.collection('connection').find({_id:info[0]}).toArray(
+        function(err, result) {
+          if(result[0]){
+           io.sockets.connected[result[0].socket_id].emit("jobcancelled", data);
+         }else{
+          proximity.removeLocation(info[0], function(err, reply){
+            if(err) console.error(err)
+              else console.log('removed location:', reply)
+            })
+          dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
+            if (!err) console.log('Deleted', result);
+          });
+        }
+      }
+      );
+    })
+
   socket.on("driverresponse", function(data){
     info = data.split(":!$)$@)!$:");
     console.log(data)
