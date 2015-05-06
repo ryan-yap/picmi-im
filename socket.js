@@ -85,6 +85,29 @@ io.on("connection", function(socket){
       );
     })
 
+  socket.on("endtransaction", function(data){
+    info = data.split(":!$)$@)!$:");
+    console.log(data)
+    var driver_id = info[1]
+    console.log(info[1])
+      //Need Error Handling
+      dispatch_db.collection('connection').find({_id:info[1]}).toArray(
+        function(err, result) {
+          if(result[0]){
+           io.sockets.connected[result[0].socket_id].emit("transactionended", data);
+         }else{
+          proximity.removeLocation(info[1], function(err, reply){
+            if(err) console.error(err)
+              else console.log('removed location:', reply)
+            })
+          dispatch_db.collection('connection').remove({socket_id:info[1]}, function(err, result) {
+            if (!err) console.log('Deleted', result);
+          });
+        }
+      }
+      );
+    })
+
   socket.on("driverresponse", function(data){
     info = data.split(":!$)$@)!$:");
     console.log(data)
