@@ -153,6 +153,48 @@ io.on("connection", function(socket){
       );
   })
 
+  socket.on("startstreaming", function(data){
+    info = data.split(":!$)$@)!$:");
+    var requester_id = info[0]
+    dispatch_db.collection('connection').find({_id:requester_id}).toArray(
+      function(err, result) {
+        console.log(result)
+        if(result[0]){
+          io.sockets.connected[result[0].socket_id].emit("streamstarted", data);
+        }else{
+          proximity.removeLocation(requester_id, function(err, reply){
+            if(err) console.error(err)
+              else console.log('removed location:', reply)
+            })
+          dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
+            if (!err) console.log('Deleted', result);
+          });
+        }
+      }
+      );
+  })
+
+  socket.on("stopstreaming", function(data){
+    info = data.split(":!$)$@)!$:");
+    var requester_id = info[0]
+    dispatch_db.collection('connection').find({_id:requester_id}).toArray(
+      function(err, result) {
+        console.log(result)
+        if(result[0]){
+          io.sockets.connected[result[0].socket_id].emit("streamstopped", data);
+        }else{
+          proximity.removeLocation(requester_id, function(err, reply){
+            if(err) console.error(err)
+              else console.log('removed location:', reply)
+            })
+          dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
+            if (!err) console.log('Deleted', result);
+          });
+        }
+      }
+      );
+  })
+
   socket.on("declinerequest", function(data){
     info = data.split(":!$)$@)!$:");
     var requester_id = info[0]
