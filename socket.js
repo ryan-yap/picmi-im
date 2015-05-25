@@ -23,26 +23,24 @@ io.on("connection", function(socket){
       if (err){ 
         throw err; 
       }
-      console.log(result[0])
+      console.log("setID","+++",result[0])
     });
   });
 
   socket.on("send", function(data){
   info = data.split(":!$)$@)!$:");
-	console.log(data)
     dispatch_db.collection('connection').find({_id:info[0]}).toArray(
       function(err, result) {
         if(result[0]){
-          console.log(result[0])
+          console.log("send","+++",data)
           io.sockets.connected[result[0].socket_id].emit("receive", data);
-          console.log(data)
         }else{
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("send", "+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("send","+++", 'Deleted', result);
           });
         }
       }
@@ -58,14 +56,15 @@ io.on("connection", function(socket){
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
           if(result[0]){
+            console.log("driverrequest","+++",data)
            io.sockets.connected[result[0].socket_id].emit("photorequest", data);
          }else{
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("driverrequest","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("driverrequest","+++",'Deleted', result);
           });
         }
       }
@@ -81,14 +80,15 @@ io.on("connection", function(socket){
       dispatch_db.collection('connection').find({_id:info[0]}).toArray(
         function(err, result) {
           if(result[0]){
-           io.sockets.connected[result[0].socket_id].emit("jobcancelled", data);
+            console.log("cancelrequest","+++",data)
+            io.sockets.connected[result[0].socket_id].emit("jobcancelled", data);
          }else{
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("cancelrequest","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("cancelrequest","+++",'Deleted', result);
           });
         }
       }
@@ -104,14 +104,15 @@ io.on("connection", function(socket){
       dispatch_db.collection('connection').find({_id:info[1]}).toArray(
         function(err, result) {
           if(result[0]){
+           console.log("endtransaction","+++",data)
            io.sockets.connected[result[0].socket_id].emit("transactionended", data);
          }else{
           proximity.removeLocation(info[1], function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("endtransaction","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[1]}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("endtransaction","+++",'Deleted', result);
           });
         }
       }
@@ -128,14 +129,15 @@ io.on("connection", function(socket){
         function(err, result) {
           console.log(result)
           if(result[0]){
+            console.log("driverresponse","+++",data)
             io.sockets.connected[result[0].socket_id].emit("photoready", data);
           }else{
             proximity.removeLocation(info[0], function(err, reply){
               if(err) console.error(err)
-                else console.log('removed location:', reply)
+                else console.log("driverresponse","+++",'removed location:', reply)
               })
             dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-              if (!err) console.log('Deleted', result);
+              if (!err) console.log("driverresponse","+++",'Deleted', result);
             });
           }
         }
@@ -149,14 +151,15 @@ io.on("connection", function(socket){
       function(err, result) {
         console.log(result)
         if(result[0]){
+          console.log("acceptrequest","+++",data)
           io.sockets.connected[result[0].socket_id].emit("requestconfirmation", data);
         }else{
           proximity.removeLocation(requester_id, function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("acceptrequest","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("acceptrequest","+++",'Deleted', result);
           });
         }
       }
@@ -170,14 +173,15 @@ io.on("connection", function(socket){
       function(err, result) {
         console.log(result)
         if(result[0]){
+          console.log("startstreaming","+++",data)
           io.sockets.connected[result[0].socket_id].emit("streamstarted", data);
         }else{
           proximity.removeLocation(requester_id, function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("startstreaming","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("startstreaming","+++",'Deleted', result);
           });
         }
       }
@@ -191,14 +195,15 @@ io.on("connection", function(socket){
       function(err, result) {
         console.log(result)
         if(result[0]){
+          console.log("stopstreaming","+++",data)
           io.sockets.connected[result[0].socket_id].emit("streamstopped", data);
         }else{
           proximity.removeLocation(requester_id, function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("stopstreaming","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("stopstreaming","+++",'Deleted', result);
           });
         }
       }
@@ -212,14 +217,15 @@ io.on("connection", function(socket){
       function(err, result) {
         console.log(result)
         if(result[0]){
+          console.log("declinerequest","+++",data)
           io.sockets.connected[result[0].socket_id].emit("requestdeclined", data);
         }else{
           proximity.removeLocation(requester_id, function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("declinerequest","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:requester_id}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("declinerequest","+++",'Deleted', result);
           });
         }
       }
@@ -235,14 +241,15 @@ io.on("connection", function(socket){
     dispatch_db.collection('connection').find({_id:info[0]}).toArray(
       function(err, result) {
         if(result[0]){
+          console.log("submitphoto","+++",data)
           io.sockets.connected[result[0].socket_id].emit("photoready", data);
         }else{
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
-              else console.log('removed location:', reply)
+              else console.log("submitphoto","+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-            if (!err) console.log('Deleted', result);
+            if (!err) console.log("submitphoto","+++",'Deleted', result);
           });
         }
       }
