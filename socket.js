@@ -23,7 +23,7 @@ io.on("connection", function(socket){
       if (err){ 
         throw err; 
       }
-      console.log("setID","+++",result[0])
+      console.log("setID","+++",data)
     });
   });
 
@@ -59,6 +59,14 @@ io.on("connection", function(socket){
             console.log("driverrequest","+++",data)
            io.sockets.connected[result[0].socket_id].emit("photorequest", data);
          }else{
+          
+          var temp_list = []
+          temp_list.push(info[1])
+          temp_list.push(info[0])
+          temp_list.push(info[4])
+          var msg = temp_list.join(":!$)$@)!$:")
+          io.sockets.connected[socket.id].emit("requestdeclined", msg);
+
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
               else console.log("driverrequest","+++",'removed location:', reply)
