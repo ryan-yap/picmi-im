@@ -349,7 +349,7 @@ function setID(data, socket){
     console.log("setID","+++",data)
   });
 
-  dispatch_db.collection('buffer_event').find({uid:info[0]}).toArray(
+  dispatch_db.collection('buffer_event').find({uid:uid}).toArray(
     function(err, result) {
       console.log(result)  
     }
