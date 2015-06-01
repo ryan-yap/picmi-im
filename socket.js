@@ -57,7 +57,6 @@ io.on("connection", function(socket){
             console.log("driverrequest","+++",data)
             io.sockets.connected[result[0].socket_id].emit("photorequest", data);
           }else{
-
             var temp_list = []
             temp_list.push(info[1])
             temp_list.push(info[0])
@@ -342,6 +341,8 @@ function setID(data, socket){
   var socket_id = socket.id;
   var uid = data
   new_connection = new connection(uid, socket_id)
+
+  console.log("Setting ID")
   dispatch_db.collection('connection').save(new_connection, function(err, result) {
     if (err){ 
       throw err; 
