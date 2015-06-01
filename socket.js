@@ -1,6 +1,6 @@
 var dispatch_db = require('mongoskin').db('mongodb://54.153.62.38:27017/Dispatch');
 var ObjectID = require('mongoskin').ObjectID
-
+var Handler = require('./handler') 
 var redis = require('redis'),
 client = redis.createClient(6379, '54.67.18.228', {})
 var proximity = require('geo-proximity').initialize(client)
@@ -22,7 +22,8 @@ function buffer_event(event_str, uid, data) {
 io.on("connection", function(socket){
   console.log("New connection")
   socket.on("setID", function(data) {
-    setID(data, socket)
+    var handler = new Handler(data, socket)
+    handler.setID(data, socket)
   });
 
   socket.on("send", function(data){
