@@ -23,7 +23,7 @@ Handler.prototype.setID = function () {
 		if (err){ 
 			throw err; 
 		}
-		console.log("setID","+++",data)
+		console.log("setID","+++",this.h_data)
 	});
 
 	dispatch_db.collection('buffer_event').find({uid:uid}).toArray(
