@@ -4,6 +4,11 @@ var redis = require('redis'),
 client = redis.createClient(6379, '54.67.18.228', {})
 var proximity = require('geo-proximity').initialize(client)
 
+function connection(uid, socket_id) {
+  this.socket_id = socket_id;
+  this._id = uid
+}
+
 function Handler(data, socket) {
 	this.h_data = data
 	this.socket = socket
