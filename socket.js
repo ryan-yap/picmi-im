@@ -1,8 +1,8 @@
-var dispatch_db = require('mongoskin').db('mongodb://54.153.62.38:27017/Dispatch');
+var dispatch_db = require('mongoskin').db('mongodb://52.8.188.79:27017/Dispatch');
 var ObjectID = require('mongoskin').ObjectID
 var Handler = require('./handler') 
 var redis = require('redis'),
-client = redis.createClient(6379, '54.67.18.228', {})
+client = redis.createClient(6379, '52.8.106.163', {})
 var proximity = require('geo-proximity').initialize(client)
 var app = require('http').createServer()
 var io = require('socket.io')(app);
@@ -344,7 +344,7 @@ function setID(data, socket){
   new_connection = new connection(uid, socket_id)
 
   console.log("Setting ID")
-  dispatch_db.collection('connection').save(new_connection, function(err, result) {
+  dispatch_db.collection('connection').insert(new_connection, function(err, result) {
     if (err){ 
       throw err; 
     }
