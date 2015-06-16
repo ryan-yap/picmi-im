@@ -22,8 +22,7 @@ function buffer_event(event_str, uid, data) {
 io.on("connection", function(socket){
   console.log("New connection")
   socket.on("setID", function(data) {
-    var handler = new Handler(data, socket)
-    handler.setID(data, socket)
+  	setID(data, socket)
   });
 
   socket.on("send", function(data){
@@ -344,7 +343,7 @@ function setID(data, socket){
   new_connection = new connection(uid, socket_id)
 
   console.log("Setting ID")
-  dispatch_db.collection('connection').insert(new_connection, function(err, result) {
+  dispatch_db.collection('connection').save(new_connection, function(err, result) {
     if (err){ 
       throw err; 
     }
