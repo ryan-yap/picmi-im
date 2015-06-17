@@ -314,7 +314,7 @@ socket.on("submitphoto", function(data){
 })
 
 socket.on("test", function(data) {
-  console.log("received messaged")
+  socket.emit('test', "true")
 })
 
 socket.on("disconnect", function() {
