@@ -8,6 +8,28 @@ var app = require('http').createServer()
 var io = require('socket.io')(app);
 app.listen(8080);
 
+function getDate(){
+	// create a new javascript Date object based on the timestamp
+	// multiplied by 1000 so that the argument is in milliseconds, not seconds
+	var date = new Date();
+
+/*	var year = date.getFullYear();
+	var month = (parseInt(date.getMonth()) + 1).toString();
+	
+	var day = date.getDate();
+	// hours part from the timestamp
+	var hours = date.getHours();
+	// minutes part from the timestamp
+	var minutes = "0" + date.getMinutes();
+	// seconds part from the timestamp
+	var seconds = "0" + date.getSeconds();
+
+	// will display time in 10:30:23 format
+	var formattedTime = day + '/' + month + '/' + year + ' - ' +  hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+*/
+	return date.toUTCString() + " - ";
+}
+
 function connection(uid, socket_id) {
   this.socket_id = socket_id;
   this._id = uid
@@ -20,7 +42,7 @@ function buffer_event(event_str, uid, data) {
 }
 
 io.on("connection", function(socket){
-  console.log("New connection")
+  console.log(getDate(), "New connection")
   socket.on("setID", function(data) {
   	setID(data, socket)
   });
@@ -30,15 +52,15 @@ io.on("connection", function(socket){
     dispatch_db.collection('connection').find({_id:info[0]}).toArray(
       function(err, result) {
         if(result[0]){
-          console.log("send","+++",data)
+          console.log(getDate(), "send","+++",data)
           io.sockets.connected[result[0].socket_id].emit("receive", data);
         }else{
           proximity.removeLocation(info[0], function(err, reply){
             if(err) console.error(err)
-              else console.log("send", "+++",'removed location:', reply)
+              else console.log(getDate(), "send", "+++",'removed location:', reply)
             })
           dispatch_db.collection('connection').remove({socket_id:info[0]}, function(err, result) {
-            if (!err) console.log("send","+++", 'Deleted', result);
+            if (!err) console.log(getDate(), "send","+++", 'Deleted', result);
           });
         }
       }
@@ -317,7 +339,7 @@ socket.on("test", function(data) {
   socket.emit('test', "true")
 })
 
-socket.on("disconnect", function() {
+/*socket.on("disconnect", function() {
   dispatch_db.collection('connection').find({socket_id:socket.id}).toArray(
     function(err, result) {
       if(result[0]){
@@ -334,7 +356,7 @@ socket.on("disconnect", function() {
     if (!err) console.log('Deleted', result);
   });
   return
-});
+});*/
 });
 
 function setID(data, socket){
@@ -342,17 +364,15 @@ function setID(data, socket){
   var uid = data
   new_connection = new connection(uid, socket_id)
 
-  console.log("Setting ID")
   dispatch_db.collection('connection').save(new_connection, function(err, result) {
     if (err){ 
       throw err; 
     }
-    console.log("setID","+++",data)
+    console.log(getDate(), "setID","+++",data)
   });
 
   dispatch_db.collection('buffer_event').find({uid:uid}).toArray(
-    function(err, result) {
-      console.log(result)  
+    function(err, result) { 
     }
   ); 
 }
